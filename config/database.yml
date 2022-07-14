@@ -3,18 +3,19 @@ default: &default
   encoding: utf8mb4
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: root
-  password:
-  host: db
+  password: <%= ENV["DATABASE_PASSWORD"] %>
+  host: <%= ENV["DATABASE_HOST"] %>
+  socket: /var/run/mysqld/mysqld.sock
 development:
   <<: *default
-  database: db_docker_development
+  database: db_docker_demo_development
 
 test:
   <<: *default
-  database: rails_docker_test
+  database: db_docker_demo_test
 
 production:
   <<: *default
-  database: rails_docker_production
-  username: rails_docker
-  password: <%= ENV["DB_DOCKER_DATABASE_PASSWORD"] %>
+  database: db_docker_demo_production
+  username: db_docker_demo
+  password: <%= ENV["DB_DOCKER_DEMO_DATABASE_PASSWORD"] %>
