@@ -6,11 +6,12 @@ services:
         - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
-      - .:/demo_app_docker
+      # - .:/demo_app_docker
     environment:
+      REDIS_HOST: redis
       # MYSQL_ALLOW_EMPTY_PASSWORD: "true"
-      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_ROOT_PASSWORD: abc
+      # MYSQL_PASSWORD: ${DATABASE_PASSWORD}
   app:
     build: .
     command: bundle exec rails s -p 3000 -b "0.0.0.0"
@@ -18,10 +19,12 @@ services:
       - .env
     volumes:
       - .:/demo_app_docker
+      # - bundle:/bundle
     ports:
       - "3000:3000"
     environment:
-      REDIS_HOST: redis
+      # - REDIS_URL=redis://redis:6379/0
+      - REDIS_URL_SIDEKIQ=redis://redis:6379/1
     depends_on:
       - db
       - redis
@@ -30,7 +33,23 @@ services:
   redis:
     image: redis:latest
     container_name: demo_app_docker_redis
-    ports:
-      - 6370:6370
+    # ports:
+    #   - 6379:6379
+    # volumes:
+    #   - redis:/data
+  sidekiq:
+    depends_on:
+      - db
+      - redis
+    build: .
+    command: bundle exec sidekiq
+    volumes:
+      - .:/demo_app_docker
+      - /demo_app_docker/tmp # don't mount tmp directory
+    environment:
+      # - REDIS_URL=redis://redis:6379/0
+      - REDIS_URL_SIDEKIQ=redis://redis:6379/1
+    env_file:
+      - .env
 volumes:
   db_data:

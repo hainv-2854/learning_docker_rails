@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_14_082405) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_20_072825) do
   create_table "high_scores", charset: "utf8mb4", force: :cascade do |t|
     t.string "game"
     t.integer "score"
@@ -20,7 +20,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_14_082405) do
 
   create_table "users", charset: "utf8mb4", force: :cascade do |t|
     t.string "name"
-    t.string "password"
+    t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_sent_email", default: false
