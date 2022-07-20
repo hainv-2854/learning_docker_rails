@@ -20,9 +20,17 @@ services:
       - .:/demo_app_docker
     ports:
       - "3000:3000"
+    environment:
+      REDIS_HOST: redis
     depends_on:
       - db
+      - redis
     stdin_open: true
     tty: true
+  redis:
+    image: redis:latest
+    container_name: demo_app_docker_redis
+    ports:
+      - 6370:6370
 volumes:
   db_data:
