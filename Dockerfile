@@ -6,14 +6,18 @@ RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs
 RUN mkdir /demo_app_docker
 
 WORKDIR /demo_app_docker
-COPY . /demo_app_docker/
 
+# COPY . /demo_app_docker
+# RUN gem install bundler && bundle install
+
+#need to separate but why
 ADD Gemfile /demo_app_docker/Gemfile
 ADD Gemfile.lock /demo_app_docker/Gemfile.lock
+RUN gem install bundler && bundle install
 
-# RUN gem install bundler -v 2.1.4 -no-rdoc -no-ri
-RUN bundle install
-ADD . /demo_app_docker
+COPY . /demo_app_docker
+#Redundant
+# ADD . /demo_app_docker
 
 EXPOSE 3000
 

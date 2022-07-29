@@ -3,9 +3,9 @@ default: &default
   encoding: utf8mb4
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: root
-  password: <%= ENV["DATABASE_PASSWORD"] %>
+  password: abc
   host: <%= ENV["DATABASE_HOST"] %>
-  socket: /var/run/mysqld/mysqld.sock
+  socket: /tmp/mysql.sock
 development:
   <<: *default
   database: db_docker_demo_development
